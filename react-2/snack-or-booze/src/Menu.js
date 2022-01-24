@@ -1,4 +1,4 @@
-import { useEffect, useState } from "react";
+import React from "react";
 import { Link, useLocation } from "react-router-dom";
 import "./Menu.css";
 import {
@@ -10,16 +10,10 @@ import {
   ListGroupItem
 } from "reactstrap";
 
-const Menu = ({ menuItems, getItems, isLoading }) => {
-
-  
+const Menu = ({ menuItems }) => {
   const { pathname } = useLocation();
-
-  useEffect(() => {
-    getItems();
-  }, [pathname])
-
-  console.log (isLoading, menuItems)
+  console.log(pathname)
+  
 
   return (
     <section className="col-md-4">
@@ -33,7 +27,7 @@ const Menu = ({ menuItems, getItems, isLoading }) => {
             bulk of the card's content.
           </CardText>
           <ListGroup>
-            {isLoading ? "Loading..." : menuItems.map(item => (
+            {menuItems.map(item => (
               <Link to={`${pathname}/${item.id}`} key={item.id}>
                 <ListGroupItem>{item.name}</ListGroupItem>
               </Link>

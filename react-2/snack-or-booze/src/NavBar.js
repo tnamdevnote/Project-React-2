@@ -13,6 +13,7 @@ const NavBar = () => {
 
         <Nav className="ml-auto" navbar>
           <NavItem>
+            <NavLink to="/addMenu">Add your own</NavLink> |
             <NavLink to="/snacks">Snacks</NavLink> |
             <NavLink to="/drinks">Drink</NavLink>
           </NavItem>
