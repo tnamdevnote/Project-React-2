@@ -1,45 +1,47 @@
-import React, { useState, useEffect } from "react";
+import React, { useState } from "react";
 import "./App.css";
 import Home from "./Home";
 import SnackOrBoozeApi from "./Api";
 import NavBar from "./NavBar";
 import { Routes, Route } from "react-router-dom";
-import Menu from "./FoodMenu";
-import Snack from "./FoodItem";
+import Menu from "./Menu";
+import Item from "./Item";
 import NotFound from "./NotFound";
 
 function App() {
-  const [isLoading, setIsLoading] = useState(true);
-  const [snacks, setSnacks] = useState([]);
-  const [drinks, setDrinks] = useState([]);
 
-  useEffect(() => {
-    const getSnacks = async() => {
-      let snacks = await SnackOrBoozeApi.getSnacks();
-      setSnacks(snacks);
-      setIsLoading(false);
-    }
-
-    const getDrinks = async() => {
-      let drinks = await SnackOrBoozeApi.getDrinks();
-      setDrinks(drinks)
-    }
-    getSnacks();
-    getDrinks();
-  }, []);
-
-  if (isLoading) {
-    return <p>Loading &hellip;</p>;
+  const INITIAL_STATE = {
+    snacks: [],
+    drinks: []
   }
+  const [isSnackLoading, setSnackIsLoading] = useState(true);
+  const [isDrinkLoading, setDrinkIsLoading] = useState(true);
+  const [menu, setMenu] = useState(INITIAL_STATE);
+
+  const getSnacks = async() => {
+    let snacksRes = await SnackOrBoozeApi.getSnacks();
+    setMenu(menu => ({ ...menu, snacks: snacksRes}));
+    setSnackIsLoading(false);
+  }
+
+  const getDrinks = async() => {
+    let drinksRes = await SnackOrBoozeApi.getDrinks();
+    setMenu(menu => ({ ...menu, drinks: drinksRes}));
+    setDrinkIsLoading(false);
+  }
+  
+console.log(menu)
 
   return (
     <div className="App">
         <NavBar />
         <main>
           <Routes>
-            <Route path="/" element={<Home snacks={snacks} />}/>
-            <Route path="/snacks" element={<Menu snacks={snacks} title="Snacks" />}/>
-            <Route path="/snacks:id" element={<Snack items={snacks} cantFind="/snacks" />}/>
+            <Route path="/" element={<Home />}/>
+            <Route path="/snacks" element={<Menu menuItems={menu.snacks} getItems={getSnacks} isLoading={isSnackLoading} title="Snacks" />}/>
+            <Route path="/drinks" element={<Menu menuItems={menu.drinks} getItems={getDrinks} isLoading={isDrinkLoading} title="Drinks" />}/>
+            <Route path="/snacks/:id" element={<Item items={menu.snacks} cantFind="/snacks" />}/>
+            <Route path="/drinks/:id" element={<Item items={menu.drinks} cantFind="/drinks" />}/>
             <Route path="*" element={<NotFound/>}/>
           </Routes>
         </main>

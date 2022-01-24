@@ -1,6 +1,6 @@
-import React from "react";
-import { Link } from "react-router-dom";
-import "./FoodMenu.css";
+import { useEffect, useState } from "react";
+import { Link, useLocation } from "react-router-dom";
+import "./Menu.css";
 import {
   Card,
   CardBody,
@@ -10,7 +10,17 @@ import {
   ListGroupItem
 } from "reactstrap";
 
-function FoodMenu({ snacks }) {
+const Menu = ({ menuItems, getItems, isLoading }) => {
+
+  
+  const { pathname } = useLocation();
+
+  useEffect(() => {
+    getItems();
+  }, [pathname])
+
+  console.log (isLoading, menuItems)
+
   return (
     <section className="col-md-4">
       <Card>
@@ -23,9 +33,9 @@ function FoodMenu({ snacks }) {
             bulk of the card's content.
           </CardText>
           <ListGroup>
-            {snacks.map(snack => (
-              <Link to={`/snacks/${snack.id}`} key={snack.id}>
-                <ListGroupItem>{snack.name}</ListGroupItem>
+            {isLoading ? "Loading..." : menuItems.map(item => (
+              <Link to={`${pathname}/${item.id}`} key={item.id}>
+                <ListGroupItem>{item.name}</ListGroupItem>
               </Link>
             ))}
           </ListGroup>
@@ -35,4 +45,4 @@ function FoodMenu({ snacks }) {
   );
 }
 
-export default FoodMenu;
+export default Menu;

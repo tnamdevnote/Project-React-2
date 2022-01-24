@@ -1,5 +1,5 @@
 import axios from "axios";
-import { useNavigate } from "react-router-dom";
+// import { Navigate } from "react-router-dom";
 
 const BASE_API_URL = "http://localhost:5000";
 
@@ -18,7 +18,7 @@ class SnackOrBoozeApi {
       return result.data;
     } catch (e) {
       console.log(e)
-      alert("We're sold out!")
+      alert("We're sold out!");
     }
     
   }
